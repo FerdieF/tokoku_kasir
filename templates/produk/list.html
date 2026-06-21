@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Produk · TokoKu Kasir{% endblock %}
+
+{% block content %}
+<div class="page-head page-head-row">
+  <div>
+    <h1>Produk</h1>
+    <p class="page-sub">{{ produk|length }} produk aktif</p>
+  </div>
+  <a href="{{ url_for('produk.tambah') }}" class="btn btn-primary">+ Tambah produk</a>
+</div>
+
+<form method="get" class="searchbar">
+  <input type="search" name="q" value="{{ q }}" placeholder="Cari nama produk…" />
+  <button type="submit" class="btn btn-ghost">Cari</button>
+  {% if q %}<a href="{{ url_for('produk.list') }}" class="btn btn-ghost">Reset</a>{% endif %}
+</form>
+
+<div class="card">
+  {% if produk %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Kode</th>
+        <th>Nama</th>
+        <th>Kategori</th>
+        <th class="num">Harga</th>
+        <th class="num">Stok</th>
+        <th class="num">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in produk %}
+      <tr>
+        <td class="mono">{{ p.kode }}</td>
+        <td>{{ p.nama }}</td>
+        <td><span class="badge badge-cat">{{ p.kategori }}</span></td>
+        <td class="num mono">{{ p.harga|rupiah }}</td>
+        <td class="num mono">
+          <span class="{{ 'text-danger' if p.stok == 0 else ('text-warn' if p.stok <= 5) }}">{{ p.stok }}</span>
+        </td>
+        <td class="num actions">
+          <a href="{{ url_for('produk.edit', id=p.id) }}" class="btn btn-ghost btn-sm">Edit</a>
+          <form method="post" action="{{ url_for('produk.hapus', id=p.id) }}"
+                onsubmit="return confirm('Nonaktifkan produk {{ p.nama }}?');">
+            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">
+    {% if q %}Tidak ada produk cocok dengan "{{ q }}".{% else %}Belum ada produk.{% endif %}
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

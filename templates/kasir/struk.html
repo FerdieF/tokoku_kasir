@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Struk {{ trx.no_transaksi }} · TokoKu Kasir{% endblock %}
+{% block main_class %}page struk-page{% endblock %}
+
+{% block content %}
+<div class="struk-actions no-print">
+  <a href="{{ url_for('kasir.index') }}" class="btn btn-ghost">← Transaksi baru</a>
+  <button type="button" class="btn btn-primary" onclick="window.print()">Cetak struk</button>
+</div>
+
+<div class="struk-panel struk-panel-center">
+  <div class="struk struk-final">
+    <div class="struk-head">
+      <div class="struk-logo">TokoKu Kasir</div>
+      <div class="struk-sub">Terima kasih telah berbelanja</div>
+    </div>
+
+    <div class="struk-divider"></div>
+
+    <div class="struk-meta-block mono">
+      <div><span>No</span><span>{{ trx.no_transaksi }}</span></div>
+      <div><span>Waktu</span><span>{{ trx.waktu.strftime('%d/%m/%Y %H:%M') }}</span></div>
+      <div><span>Kasir</span><span>{{ trx.kasir.nama if trx.kasir else '-' }}</span></div>
+    </div>
+
+    <div class="struk-divider"></div>
+
+    <div class="struk-items">
+      {% for item in trx.items %}
+      <div class="struk-item">
+        <div class="struk-item-top">
+          <span class="struk-item-nama">{{ item.nama_produk }}</span>
+          <span class="leader"></span>
+          <span class="struk-item-sub mono">{{ item.subtotal|rupiah }}</span>
+        </div>
+        <div class="struk-item-detail mono">{{ item.qty }} × {{ item.harga_satuan|rupiah }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="struk-divider"></div>
+
+    <div class="struk-line">
+      <span>Subtotal</span><span class="mono">{{ trx.total|rupiah }}</span>
+    </div>
+    {% if trx.diskon %}
+    <div class="struk-line">
+      <span>Diskon</span><span class="mono">− {{ trx.diskon|rupiah }}</span>
+    </div>
+    {% endif %}
+    <div class="struk-line struk-total">
+      <span>TOTAL</span><span class="mono">{{ trx.total_akhir|rupiah }}</span>
+    </div>
+
+    <div class="struk-divider"></div>
+
+    <div class="struk-line">
+      <span>Bayar</span><span class="mono">{{ trx.bayar|rupiah }}</span>
+    </div>
+    <div class="struk-line struk-kembali">
+      <span>Kembalian</span><span class="mono">{{ trx.kembalian|rupiah }}</span>
+    </div>
+
+    <div class="struk-divider"></div>
+    <div class="struk-foot mono">— {{ trx.no_transaksi }} —</div>
+  </div>
+</div>
+{% endblock %}

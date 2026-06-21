@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Riwayat · TokoKu Kasir{% endblock %}
+
+{% block content %}
+<div class="page-head page-head-row">
+  <div>
+    <h1>Riwayat transaksi</h1>
+    <p class="page-sub">{{ transaksi|length }} transaksi ditampilkan{% if tanggal %} · {{ tanggal }}{% endif %}</p>
+  </div>
+  <a href="{{ url_for('riwayat.export_csv', tanggal=tanggal) }}" class="btn btn-ghost">⤓ Export CSV</a>
+</div>
+
+<form method="get" class="searchbar">
+  <input type="date" name="tanggal" value="{{ tanggal }}" />
+  <button type="submit" class="btn btn-ghost">Filter</button>
+  {% if tanggal %}<a href="{{ url_for('riwayat.list') }}" class="btn btn-ghost">Reset</a>{% endif %}
+</form>
+
+<div class="card">
+  {% if transaksi %}
+  <table class="table table-clickable">
+    <thead>
+      <tr>
+        <th>No transaksi</th>
+        <th>Waktu</th>
+        <th>Kasir</th>
+        <th class="num">Item</th>
+        <th class="num">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in transaksi %}
+      <tr onclick="window.location='{{ url_for('riwayat.detail', id=t.id) }}'">
+        <td class="mono">{{ t.no_transaksi }}</td>
+        <td>{{ t.waktu.strftime('%d/%m/%Y %H:%M') }}</td>
+        <td>{{ t.kasir.nama if t.kasir else '-' }}</td>
+        <td class="num mono">{{ t.jumlah_item }}</td>
+        <td class="num mono">{{ t.total_akhir|rupiah }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">
+    {% if tanggal %}Tidak ada transaksi pada {{ tanggal }}.{% else %}Belum ada transaksi.{% endif %}
+  </p>
+  {% endif %}
+</div>
+{% endblock %}

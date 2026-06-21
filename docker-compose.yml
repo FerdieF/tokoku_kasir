@@ -1,0 +1,17 @@
+# Jalankan dengan: docker compose up --build
+# Lalu buka http://localhost:5000  (admin/admin123 atau kasir/kasir123)
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      # Ganti dengan nilai acak yang aman untuk produksi.
+      - SECRET_KEY=ubah-ini-dengan-string-acak
+    volumes:
+      # Persist database SQLite agar tidak hilang saat container restart.
+      - kasir-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  kasir-data:

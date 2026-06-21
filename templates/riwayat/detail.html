@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ trx.no_transaksi }} · TokoKu Kasir{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <a href="{{ url_for('riwayat.list') }}" class="back-link">← Kembali ke riwayat</a>
+  <div class="page-head-row">
+    <div>
+      <h1 class="mono">{{ trx.no_transaksi }}</h1>
+      <p class="page-sub">{{ trx.waktu.strftime('%A, %d %B %Y · %H:%M') }}</p>
+    </div>
+    <a href="{{ url_for('kasir.struk', id=trx.id) }}" class="btn btn-ghost">Lihat struk</a>
+  </div>
+</div>
+
+<div class="detail-cols">
+  <section class="card">
+    <div class="card-head"><h2>Item</h2></div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th class="num">Harga</th>
+          <th class="num">Qty</th>
+          <th class="num">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in trx.items %}
+        <tr>
+          <td>{{ item.nama_produk }}</td>
+          <td class="num mono">{{ item.harga_satuan|rupiah }}</td>
+          <td class="num mono">{{ item.qty }}</td>
+          <td class="num mono">{{ item.subtotal|rupiah }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card card-narrow detail-summary">
+    <div class="card-head"><h2>Ringkasan</h2></div>
+    <div class="sum-line"><span>Subtotal</span><span class="mono">{{ trx.total|rupiah }}</span></div>
+    {% if trx.diskon %}
+    <div class="sum-line"><span>Diskon</span><span class="mono">− {{ trx.diskon|rupiah }}</span></div>
+    {% endif %}
+    <div class="sum-line sum-total"><span>Total</span><span class="mono">{{ trx.total_akhir|rupiah }}</span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-line"><span>Bayar</span><span class="mono">{{ trx.bayar|rupiah }}</span></div>
+    <div class="sum-line"><span>Kembalian</span><span class="mono">{{ trx.kembalian|rupiah }}</span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-line"><span>Kasir</span><span>{{ trx.kasir.nama if trx.kasir else '-' }}</span></div>
+  </section>
+</div>
+{% endblock %}

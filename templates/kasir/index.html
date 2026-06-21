@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Kasir · TokoKu Kasir{% endblock %}
+{% block main_class %}page kasir-page{% endblock %}
+
+{% block content %}
+<div class="kasir-layout">
+
+  <!-- KIRI: katalog produk -->
+  <section class="katalog">
+    <div class="katalog-toolbar">
+      <input type="search" id="cari-produk" placeholder="Cari produk…" class="katalog-search" />
+      <div class="chips" id="chips">
+        <button type="button" class="chip active" data-kategori="">Semua</button>
+        {% for k in kategori %}
+        <button type="button" class="chip" data-kategori="{{ k }}">{{ k }}</button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="produk-grid" id="produk-grid">
+      {% for p in produk %}
+      <button type="button"
+              class="produk-tile {{ 'habis' if p.stok == 0 }}"
+              data-id="{{ p.id }}"
+              data-nama="{{ p.nama }}"
+              data-harga="{{ p.harga }}"
+              data-stok="{{ p.stok }}"
+              data-kategori="{{ p.kategori }}"
+              {{ 'disabled' if p.stok == 0 }}>
+        <span class="tile-kat">{{ p.kategori }}</span>
+        <span class="tile-nama">{{ p.nama }}</span>
+        <span class="tile-harga mono">{{ p.harga|rupiah }}</span>
+        <span class="tile-stok">stok: <b class="mono">{{ p.stok }}</b></span>
+      </button>
+      {% endfor %}
+    </div>
+    <p class="empty hidden" id="grid-empty">Tidak ada produk cocok.</p>
+  </section>
+
+  <!-- KANAN: struk / keranjang -->
+  <aside class="struk-panel">
+    <div class="struk">
+      <div class="struk-head">
+        <div class="struk-logo">TokoKu Kasir</div>
+        <div class="struk-meta mono">
+          Kasir: {{ current_user.nama }}<br />
+          <span id="struk-tanggal"></span>
+        </div>
+      </div>
+
+      <div class="struk-divider"></div>
+
+      <div class="struk-items" id="cart-items">
+        <p class="struk-empty" id="cart-empty">Keranjang kosong.<br />Klik produk untuk menambah.</p>
+      </div>
+
+      <div class="struk-divider"></div>
+
+      <div class="struk-line">
+        <span>Subtotal</span>
+        <span class="mono" id="subtotal">Rp 0</span>
+      </div>
+
+      <div class="struk-line struk-line-input">
+        <label for="diskon">Diskon (Rp)</label>
+        <input type="number" id="diskon" class="mono input-inline" min="0" step="500" value="0" />
+      </div>
+
+      <div class="struk-line struk-total">
+        <span>TOTAL</span>
+        <span class="mono" id="total">Rp 0</span>
+      </div>
+
+      <div class="struk-divider"></div>
+
+      <div class="struk-pay">
+        <label for="bayar">Bayar</label>
+        <input type="number" id="bayar" class="mono input-bayar" min="0" step="500"
+               placeholder="0" inputmode="numeric" />
+        <div class="quick-pay" id="quick-pay">
+          <button type="button" data-action="pas">Uang pas</button>
+          <button type="button" data-amount="50000">50rb</button>
+          <button type="button" data-amount="100000">100rb</button>
+        </div>
+      </div>
+
+      <div class="struk-line struk-kembali">
+        <span>Kembalian</span>
+        <span class="mono" id="kembalian">Rp 0</span>
+      </div>
+
+      <p class="struk-error hidden" id="checkout-error"></p>
+
+      <button type="button" class="btn btn-primary btn-block btn-bayar" id="btn-bayar" disabled>
+        Bayar
+      </button>
+    </div>
+  </aside>
+</div>
+
+<!-- Data produk untuk JS (harga & stok tetap divalidasi ulang di server) -->
+<script type="application/json" id="produk-data">
+  [
+    {% for p in produk %}
+    {"id": {{ p.id }}, "nama": {{ p.nama|tojson }}, "harga": {{ p.harga }}, "stok": {{ p.stok }}, "kategori": {{ p.kategori|tojson }}}{{ "," if not loop.last }}
+    {% endfor %}
+  ]
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/kasir.js') }}"></script>
+{% endblock %}

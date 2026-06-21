@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Masuk · TokoKu Kasir{% endblock %}
+{% block main_class %}auth-page{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+  <div class="auth-receipt-top"></div>
+  <div class="auth-body">
+    <div class="auth-brand">
+      <span class="brand-mark">●</span> TokoKu<span class="brand-thin">Kasir</span>
+    </div>
+    <p class="auth-tagline">Point of Sale untuk warung &amp; kafe</p>
+
+    <form method="post" class="auth-form" novalidate>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="username"
+             autofocus required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password"
+             autocomplete="current-password" required />
+
+      <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+    </form>
+
+    <div class="auth-demo">
+      <span class="auth-demo-title">Akun demo</span>
+      <code>admin / admin123</code>
+      <code>kasir / kasir123</code>
+    </div>
+  </div>
+</div>
+{% endblock %}

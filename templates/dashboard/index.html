@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · TokoKu Kasir{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1>Dashboard</h1>
+  <p class="page-sub">Ringkasan toko hari ini</p>
+</div>
+
+<section class="stat-grid">
+  <div class="stat-card stat-accent">
+    <span class="stat-label">Penjualan hari ini</span>
+    <span class="stat-value mono">{{ total_hari_ini|rupiah }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Transaksi hari ini</span>
+    <span class="stat-value mono">{{ jumlah_transaksi }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Produk aktif</span>
+    <span class="stat-value mono">{{ produk_aktif }}</span>
+  </div>
+</section>
+
+<div class="dash-cols">
+  <section class="card">
+    <div class="card-head">
+      <h2>Produk terlaris</h2>
+      <span class="card-hint">akumulasi sepanjang waktu</span>
+    </div>
+    {% if top_produk %}
+    <div class="bars">
+      {% for row in top_produk %}
+      <div class="bar-row">
+        <span class="bar-name">{{ row.nama_produk }}</span>
+        <div class="bar-track">
+          <div class="bar-fill"
+               style="width: {{ ((row.total_qty / max_qty) * 100) if max_qty else 0 }}%;"></div>
+        </div>
+        <span class="bar-qty mono">{{ row.total_qty }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty">Belum ada penjualan. Lakukan transaksi pertama di halaman Kasir.</p>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <div class="card-head">
+      <h2>Stok menipis</h2>
+      <span class="card-hint">sisa ≤ 5</span>
+    </div>
+    {% if stok_menipis %}
+    <ul class="stok-list">
+      {% for p in stok_menipis %}
+      <li>
+        <span class="stok-nama">{{ p.nama }}</span>
+        <span class="badge {{ 'badge-danger' if p.stok == 0 else 'badge-warn' }} mono">
+          {{ p.stok }} tersisa
+        </span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="empty">Semua stok aman. Tidak ada yang menipis.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
