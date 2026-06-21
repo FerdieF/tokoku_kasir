@@ -123,7 +123,7 @@ tokoku-kasir/
 - **Soft-delete** — produk dinonaktifkan (`aktif = False`), tidak dihapus permanen, supaya FK dari transaksi lama tidak rusak.
 - **Jangan percaya client** — angka dari JavaScript hanya untuk tampilan; semua dihitung ulang dari DB saat checkout.
 
-## Roadmap / belum dikerjakan (jujur)
+## Roadmap (undone)
 
 - Belum ada **proteksi CSRF** pada form & endpoint checkout (diabaikan demi menjaga scope tetap ringkas).
 - Belum ada **multi-cabang / multi-toko**.
