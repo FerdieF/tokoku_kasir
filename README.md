@@ -4,15 +4,6 @@ Aplikasi **Point of Sale** sederhana untuk toko/UMKM kecil (warung, kafe). Kasir
 
 > Server-rendered, bukan SPA — sengaja dibuat agar scope realistis dan mudah di-review langsung dari source code.
 
-## Tangkapan layar
-
-> **TODO:** tambahkan screenshot setelah dijalankan. Halaman yang paling layak difoto:
-> - `/kasir` — panel keranjang bergaya struk thermal (halaman signature)
-> - `/` — dashboard dengan bar chart produk terlaris
-> - `/kasir/struk/<id>` — struk siap cetak
->
-> Letakkan gambar di `docs/` lalu tautkan di sini, mis. `![Halaman Kasir](docs/kasir.png)`.
-
 ## Fitur
 
 - **Login / logout** berbasis session, password di-hash (`werkzeug.security`).
